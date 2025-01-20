@@ -10,17 +10,22 @@ add_library(${PROJECT_NAME})
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_boost.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_fmt.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_glog.cmake)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         Boost::preprocessor
-        fmt::fmt)
+        fmt::fmt
+        glog::glog)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR})
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly ROOT_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/concurrency CONCURRENCY_SRC)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/detail DETAIL_SRC)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/hash HASH_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/lang LANG_SRC)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/memory MEMORY_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/portability PORTABILITY_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/synchronization SYNC_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/system SYSTEM_SRC)
@@ -28,7 +33,10 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/system SYSTEM_SRC)
 target_sources(${PROJECT_NAME} PRIVATE
         ${ROOT_SRC}
         ${CONCURRENCY_SRC}
+        ${DETAIL_SRC}
+        ${HASH_SRC}
         ${LANG_SRC}
+        ${MEMORY_SRC}
         ${PORTABILITY_SRC}
         ${SYNC_SRC}
         ${SYSTEM_SRC})
