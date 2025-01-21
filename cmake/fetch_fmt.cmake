@@ -1,5 +1,8 @@
 include(FetchContent)
 
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/fmt-11.0.2.zip")
     FetchContent_Declare(
             fmt

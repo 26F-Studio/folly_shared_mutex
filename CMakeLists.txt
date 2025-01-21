@@ -30,9 +30,6 @@ set(FOLLY_HAVE_PTHREAD "${CMAKE_USE_PTHREADS_INIT}")
 list(APPEND CMAKE_REQUIRED_LIBRARIES Threads::Threads)
 list(APPEND FOLLY_LINK_LIBRARIES Threads::Threads)
 
-add_library(${PROJECT_NAME})
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_boost.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_fmt.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_glog.cmake)
@@ -41,18 +38,6 @@ configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/folly-config.h.cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/folly/folly-config.h
 )
-
-target_compile_options(${PROJECT_NAME} PRIVATE -ffunction-sections -fdata-sections)
-
-target_link_options(${PROJECT_NAME} PRIVATE "LINKER:--gc-sections")
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-        Boost::preprocessor
-        fmt::fmt
-        glog::glog)
-
-target_include_directories(${PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR})
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly ROOT_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/concurrency CONCURRENCY_SRC)
@@ -64,6 +49,32 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/memory/detail MEMORY_DETA
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/portability PORTABILITY_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/synchronization SYNC_SRC)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/folly/system SYSTEM_SRC)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/wrapper WRAPPER_SRC)
+
+add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(shared_mutex_wrapper SHARED)
+
+#target_compile_options(${PROJECT_NAME} PRIVATE -ffunction-sections -fdata-sections)
+#target_compile_options(shared_mutex_wrapper PRIVATE -ffunction-sections -fdata-sections)
+#
+#target_link_options(${PROJECT_NAME} PRIVATE "LINKER:--gc-sections")
+#target_link_options(shared_mutex_wrapper PRIVATE "LINKER:--gc-sections")
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        Boost::preprocessor
+        fmt::fmt
+        glog::glog)
+
+target_link_libraries(shared_mutex_wrapper PRIVATE
+        Boost::preprocessor
+        fmt::fmt
+        glog::glog)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(shared_mutex_wrapper PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_sources(${PROJECT_NAME} PRIVATE
         ${ROOT_SRC}
@@ -76,5 +87,18 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${PORTABILITY_SRC}
         ${SYNC_SRC}
         ${SYSTEM_SRC})
+
+target_sources(shared_mutex_wrapper PRIVATE
+        ${ROOT_SRC}
+        ${CONCURRENCY_SRC}
+        ${DETAIL_SRC}
+        ${HASH_SRC}
+        ${LANG_SRC}
+        ${MEMORY_SRC}
+        ${MEMORY_DETAIL_SRC}
+        ${PORTABILITY_SRC}
+        ${SYNC_SRC}
+        ${SYSTEM_SRC}
+        ${WRAPPER_SRC})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PACKAGE_VERSION})
