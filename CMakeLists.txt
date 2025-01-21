@@ -41,6 +41,10 @@ configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/folly/folly-config.h
 )
 
+target_compile_options(${PROJECT_NAME} PRIVATE -ffunction-sections -fdata-sections)
+
+target_link_options(${PROJECT_NAME} PRIVATE "LINKER:--gc-sections")
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
         Boost::preprocessor
         fmt::fmt
