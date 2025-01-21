@@ -30,7 +30,7 @@ set(FOLLY_HAVE_PTHREAD "${CMAKE_USE_PTHREADS_INIT}")
 list(APPEND CMAKE_REQUIRED_LIBRARIES Threads::Threads)
 list(APPEND FOLLY_LINK_LIBRARIES Threads::Threads)
 
-add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME} SHARED)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_boost.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_fmt.cmake)
