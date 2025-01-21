@@ -34,6 +34,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_boost.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_fmt.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fetch_glog.cmake)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FollyConfigChecks.cmake)
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/folly-config.h.cmake
         ${CMAKE_CURRENT_SOURCE_DIR}/folly/folly-config.h
